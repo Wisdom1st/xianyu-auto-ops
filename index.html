@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>闲鱼全自动运营可行性调研</title>
+<meta name="description" content="用 AI 全自动运营闲鱼的可行性调研：上架、虚拟课程自动发货、后期维护。只做调研，不登录闲鱼。">
+<style>
+@font-face{
+  font-family:"Noto Sans SC";
+  src:url("fonts/NotoSansSC-Regular-subset.woff2") format("woff2");
+  font-weight:400 700;
+  font-style:normal;
+  font-display:swap;
+}
+:root{
+  --bg:#f6f3ee; --ink:#1f1b16; --mute:#6a645b; --line:#e4ddd2;
+  --card:#fffdf8; --red:#9b2c24; --red-soft:rgba(155,44,36,.1);
+  --ok:#215c45; --ok-soft:rgba(33,92,69,.1);
+  --warn:#8a5a12; --warn-soft:rgba(138,90,18,.12);
+  --chip:#f3eee4; --shadow:0 8px 24px rgba(50,35,20,.06);
+  --safe-t:env(safe-area-inset-top,0px); --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{
+  font:16px/1.7 "Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  padding:calc(18px + var(--safe-t)) 16px calc(40px + var(--safe-b));
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+.wrap{max-width:760px;margin:0 auto}
+h1{font-size:1.45rem;line-height:1.35;margin:0 0 8px;font-weight:700;letter-spacing:.02em}
+h1:after{content:"";display:block;width:2.4rem;height:3px;background:var(--red);margin-top:10px;border-radius:2px}
+.meta{color:var(--mute);font-size:13px;margin:0 0 18px}
+nav.toc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+nav.toc a{
+  display:inline-flex;align-items:center;min-height:40px;padding:0 12px;border-radius:999px;
+  background:var(--chip);color:var(--ink);text-decoration:none;font-size:13px;border:1px solid var(--line)
+}
+.box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 16px 14px;margin:0 0 14px;box-shadow:var(--shadow)}
+.box.lead{border-color:var(--red);box-shadow:0 0 0 1px var(--red-soft),var(--shadow)}
+.box h2{margin:0 0 8px;font-size:1.08rem}
+.box h3{margin:16px 0 6px;font-size:1rem}
+.kicker{font-size:12px;letter-spacing:.08em;color:var(--red);font-weight:700;margin:0 0 6px}
+.tag{display:inline-flex;align-items:center;min-height:22px;padding:0 8px;border-radius:999px;font-size:12px;font-weight:700;margin:0 6px 6px 0}
+.tag-no{background:var(--red-soft);color:var(--red)}
+.tag-mid{background:var(--warn-soft);color:var(--warn)}
+.tag-ok{background:var(--ok-soft);color:var(--ok)}
+ol.steps,ul{margin:8px 0 0;padding-left:1.2em}
+ol.steps li,ul li{margin:0 0 8px}
+ol.steps li{padding-left:2px}
+.who{color:var(--mute);font-size:13px}
+blockquote{
+  margin:10px 0;padding:10px 12px;border-left:3px solid var(--red);
+  background:var(--red-soft);border-radius:0 10px 10px 0;font-size:14px
+}
+blockquote cite{display:block;margin-top:6px;color:var(--mute);font-style:normal;font-size:12px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:8px 0}
+th,td{border-bottom:1px solid var(--line);text-align:left;vertical-align:top;padding:8px 6px}
+th{font-size:12px;color:var(--mute);font-weight:700}
+a{color:var(--red);text-underline-offset:2px;word-break:break-all}
+.muted{color:var(--mute);font-size:13px}
+.gap{background:var(--warn-soft);border-color:#e6d2a8}
+.foot{color:var(--mute);font-size:12px;margin-top:8px}
+@media (max-width:520px){
+  table,thead,tbody,th,td,tr{display:block}
+  thead{display:none}
+  tr{border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin:0 0 10px;background:var(--card)}
+  td{border:0;padding:4px 0}
+  td:before{content:attr(data-label);display:block;font-size:12px;color:var(--mute);font-weight:700;margin-bottom:2px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="kicker">调研报告 · 只读 · 未登录闲鱼</p>
+<h1>用 AI 全自动运营闲鱼：可行方法与风险</h1>
+<p class="meta">调研完成：2026年11月25日 06:31（台北时间） · 简体中文 · 结论先行<br>
+范围：商品上架、买家下单后自动发送课程、后期维护（咨询回复、擦亮、改价、评价）。<br>
+限制：只做公开资料调研，不登录闲鱼，不发布，不下单，不联系任何人。</p>
+
+<nav class="toc" aria-label="目录">
+  <a href="#conclusion">结论</a>
+  <a href="#plan">推荐方案</a>
+  <a href="#steps">马上三步</a>
+  <a href="#risk">官方规则与风险</a>
+  <a href="#methods">方法对照</a>
+  <a href="#sources">来源与缺口</a>
+</nav>
+
+<section class="box lead" id="conclusion">
+  <h2>结论</h2>
+  <p><span class="tag tag-no">不能全自动接管</span>在不违反闲鱼官方规则、不把账号交给非授权工具的前提下，<strong>普通个人卖家无法让 AI 完全接管闲鱼、彻底代替手动操作</strong>。</p>
+  <p>原因有三条，均有官方原文：</p>
+  <ul>
+    <li>官方软件协议禁止使用未经闲鱼或其关联公司「开发、授权或认可/认证」的第三方兼容软件、插件和外挂，也禁止用非授权工具获取或改写客户端与服务器交互数据；违规可被中止或终止服务。</li>
+    <li>用户协议规定账户「仅限您本人使用」，未经闲鱼同意，授权第三方使用账户或获取账户信息的行为无效；根本违约可被查封账户。</li>
+    <li>闲鱼官方开放能力（小程序 / 服务端 API，含虚拟发货接口）公开写明「不对外公开开放申请，只面向闲鱼运营小二定向邀请的服务商」。个人课程卖家没有可自助申请的官方全自动接口。</li>
+  </ul>
+  <p>市场上有大量开源「自动回复 + 自动发货 + 自动擦亮」项目，技术上能在 Linux 电脑上跑，但实现方式普遍是非官方 WebSocket / Cookie / 浏览器自动化，与上述条款直接冲突，封号风险高。这些方案<strong>不建议使用</strong>，也<strong>不能</strong>装在这台共享电脑上，更不能由助手 bot 登录闲鱼（站内规则：一个 bot 只登录一个平台，闲鱼目前由本人发布）。</p>
+</section>
+
+<section class="box" id="plan">
+  <h2>推荐方案</h2>
+  <p><strong>先走官方、低封号风险、半自动：本人继续用官方 App 或鱼小铺发布和发货，AI 只写稿和提醒，不登录闲鱼。</strong>等本人在 App 里核对官方能力和授权工具后，再决定要不要为「自动发货」单独评估闲管家。</p>
+  <h3>1. 商品上架</h3>
+  <p>继续由本人在官方闲鱼 App，或官方网页工作台「鱼小铺」<a href="https://seller.goofish.com/">seller.goofish.com</a>（本次访问返回 200）发布。AI 只负责起草标题、描述、价格建议和答疑稿，由本人粘贴后发布。不要用开源项目的批量发布功能。</p>
+  <h3>2. 课程自动发货</h3>
+  <p>当前最稳妥：买家付款后，本人在闲鱼站内聊天发出课程（或官方允许的交付方式），不要引导去微信等站外交易。多家非官方教程称鱼小铺有「智能客服」关键词回复，但本次<strong>未登录 App，未能核实入口是否仍在</strong>，需本人打开确认。若官方无法在付款后自动发出课程内容，再由本人评估闲管家的「无卡商品自动发货」（同一课程内容发给所有买家）。闲管家自称官方授权电脑工作台，但其授权是否仍有效、范围是否覆盖自动发货，本次未能在阿里官方页面完整核实，且涉及付费，须本人批准后再订购。</p>
+  <h3>3. 后期维护</h3>
+  <p>回复咨询：优先用官方能力（若有智能客服）+ AI 预写答复，本人确认后发送。擦亮、改价、评价：继续在官方 App 或已核实授权的官方工作台操作。不要用开源脚本做自动擦亮、自动评价、自动求红花——这类高频自动化最容易触发风控，也与软件协议冲突。</p>
+  <p class="muted">iPhone 12 Pro：可正常使用官方闲鱼 App，这是目前最低风险的操作端。共享 Linux 电脑：不要保存闲鱼账密，不要运行非官方闲鱼脚本。闲管家提供的是电脑客户端，不是 iPhone App；是否有官方 Linux 版本次未核实，不建议装在共享电脑上。</p>
+</section>
+
+<section class="box" id="steps">
+  <h2>马上能做的 3 步</h2>
+  <ol class="steps">
+    <li><strong>核对官方现行规则（本人，今天或本周内）</strong><br>
+      <span class="who">谁做：聪伟。在 iPhone 打开闲鱼 App → 我的 → 闲鱼公约，保存《软件许可使用协议》《用户服务协议》《闲鱼社区管理规范》现行全文（网页版部分规则已于 2021 年改以 App 为准）。</span><br>
+      完成标准：把这三份最新规则的截图或导出页交给项目总管存档。</li>
+    <li><strong>核对本店官方能力与授权工具（本人，第 1 步之后）</strong><br>
+      <span class="who">谁做：聪伟。① 在闲鱼 App / 鱼小铺里查找是否有「智能客服」或官方自动回复、虚拟发货设置；② 在淘宝服务市场或闲鱼官方客服处查询「闲管家」是否仍为在架、授权服务商，以及自动发货是否在授权范围内。不要先付款。</span><br>
+      完成标准：写下两句话：「鱼小铺/App 有没有官方自动发货或智能客服」「服务市场或官方客服是否确认闲管家仍授权」，发给项目总管。</li>
+    <li><strong>在前两步完成并亲自批准前，维持本人发货，不上非官方脚本（即日起）</strong><br>
+      <span class="who">谁做：聪伟与各助手。不安装开源自动回复/自动发货项目，不把闲鱼账密交给共享电脑或任何 bot，不订购付费工具。</span><br>
+      完成标准：店铺仍由本人在官方 App 发布和发货；本页链接存档备用。</li>
+  </ol>
+</section>
+
+<section class="box" id="risk">
+  <h2>官方规则与封号风险</h2>
+  <p>以下原文均已打开官方页面核对。2021 年 3 月 10 日公示写明：修订后的闲鱼社区规则以闲鱼 App「我的 → 闲鱼公约」展示为准，原淘宝规则频道内容同步下线。故管理规范等细则的<strong>最新全文以 App 为准</strong>；下面能给出官方网页原文的，已注明版本日期。</p>
+
+  <h3>禁止非授权插件、外挂和抓取交互数据</h3>
+  <blockquote>
+    「通过非由我们或我们关联公司开发、授权或认可的第三方兼容软件、系统登录或使用许可软件，或针对许可软件使用非由我们及我们关联公司开发、授权或认证的插件和外挂」；「对许可软件或者许可软件运行过程中释放在终端中的任何数据及许可软件运行过程中终端与服务器端的交互数据进行获取、复制、修改或创作任何衍生作品，包括使用插件、外挂或非经授权的第三方工具/服务接入许可软件和相关系统等形式」；「通过修改或伪造许可软件运行中的指令、数据、数据包，增加、删减、变动许可软件的功能或运行效果……」<br>
+    涉嫌违反时，可「中止、终止对您提供软件许可与闲鱼服务」。
+    <cite>来源：<a href="https://terms.alicdn.com/legal-agreement/terms/common_platform_service/20230509172204596/20230509172204596.html">《软件许可使用协议》</a>，最新版本日期 2026年4月18日，第四条「使用规范」第 3、5、6 项及处理措施。已核实。</cite>
+  </blockquote>
+
+  <h3>账户只能本人使用</h3>
+  <blockquote>
+    「您的账户仅限您本人使用。未经闲鱼社区同意，您直接或间接授权第三方使用您账户或获取您账户项下信息的行为无效。」闲鱼若判断可能危及账户、财产或社区信息安全，可暂停、拒绝或终止服务。根本违约时，「闲鱼可查封您的账户并终止向您提供服务」。
+    <cite>来源：<a href="https://terms.alicdn.com/legal-agreement/terms/suit_bu1_other/suit_bu1_other201708081618_51146.html">《闲鱼社区用户服务协议》</a>，最新版本日期 2026年5月27日，生效日期 2026年6月15日，第 3.3 条、第 6.2 条。已核实。</cite>
+  </blockquote>
+
+  <h3>与课程发货相关的发布限制</h3>
+  <ul>
+    <li>2019 年官方公示的《闲鱼社区信息发布规范》禁止发布「不可查询的虚拟服务商品」，并将「引导站外、垃圾无效广告」列入高风险类。违规可下架、限权、扣分甚至查封账户。<cite class="muted"> <a href="https://haibao.m.taobao.com/html/XZ9E4VaGM">公示通知</a>，2019年11月27日公示、12月4日生效。已核实。2023 年修订转载常见于非官方站点，与 App 现行文本是否完全一致，待本人在 App 内核对。</cite></li>
+    <li>同一公示页还收录 2019年3月22日《关于闲鱼社区音视频类商品的管控通知》：将对「存储性质的音频、视频类商品」专项清理，「包括但不仅限于云存储的音视频、种子资源、通过云盘/在线分享等形式发货的虚拟类商品」。这是官方历史公告。它在 2026 年是否仍按原文执行，本次未能在 App 现行规则里复核，列为待核实。课程若以网盘链接交付，需本人对照现行公约后再决定写法与交付方式。</li>
+    <li>《闲鱼社区卖家服务协议》（生效日期 2025年9月17日）附件要求卖家不参与销量、评价、「闲气值评分」等交易信用炒作。<a href="https://terms.alicdn.com/legal-agreement/terms/platform_service/20220929192826912/20220929192826912.html">原文</a>已核实。自动好评、自动求红花即使技术上能做，也有信用炒作与协议风险。</li>
+  </ul>
+</section>
+
+<section class="box" id="methods">
+  <h2>方法对照</h2>
+  <p class="muted">费用只写有出处的数字；没有官方结算页核对的，标明待核实。实现说明保持在方法层面，不提供非官方接口的操作步骤。</p>
+
+  <h3>方法 A. 官方 App + 鱼小铺 + AI 写稿（推荐）</h3>
+  <p><span class="tag tag-ok">低风险</span></p>
+  <table>
+    <thead><tr><th>项</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td data-label="怎么实现">怎么实现</td><td>本人在官方闲鱼 App 或鱼小铺后台发布商品、改价、擦亮、回复和发货。AI 预写文案和答复，本人确认后发出。付款通知走官方 App 推送。</td></tr>
+      <tr><td data-label="工具与账号">工具与账号</td><td>本人的闲鱼账号；可选鱼小铺网页工作台 <a href="https://seller.goofish.com/">seller.goofish.com</a>。不需要把账密交给助手或共享电脑。</td></tr>
+      <tr><td data-label="费用">费用</td><td>官方 App 与鱼小铺工作台本身未查到公开收费；本次未登录后台，若有保证金或增值服务，以页面展示为准。</td></tr>
+      <tr><td data-label="规则与风险">规则与风险</td><td>走官方客户端，不触及插件/外挂禁令。仍须遵守信息发布规范、不引导站外交易、商品描述真实。不能做到「完全不用手动」。</td></tr>
+      <tr><td data-label="能否运行">能否运行</td><td>iPhone 12 Pro：可以，这是正路。共享 Linux 电脑：不要登录闲鱼。Bot：不要登录闲鱼。</td></tr>
+      <tr><td data-label="覆盖范围">覆盖范围</td><td>上架、改价、擦亮、回复、发货都能做，但是手动或半自动。付款后自动发送课程：官方是否提供，待第 2 步核实（非官方教程称有「智能客服」，未登录核实）。</td></tr>
+    </tbody>
+  </table>
+
+  <h3>方法 B. 闲管家等自称官方授权的电脑工作台</h3>
+  <p><span class="tag tag-mid">中等风险 · 授权待核 · 涉及付费须批准</span></p>
+  <table>
+    <thead><tr><th>项</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td data-label="怎么实现">怎么实现</td><td>按其操作手册：注册管家账号，绑定闲鱼号（短信验证码或闲鱼会员名+密码，进入「应用授权」页），再在工作台发布商品、同步订单、设置卡密或「无卡商品」自动发货、自动擦亮。手册写明：1 个管家账号最多绑定 30 个闲鱼号；闲鱼 App 发布的商品无法加入自动擦亮；基础版店铺不能用自动擦亮。无卡商品自动发货适合「同一课程内容发给所有买家」。手册建议先发带订单编号的发货声明，买家确认后再执行自动发货。另有开放平台，可对接第三方 ERP 或自研系统（商品、订单、发货同步）。手册：<a href="https://m.goofish.pro/app/operation.html">m.goofish.pro/app/operation.html</a>（已打开核对）。</td></tr>
+      <tr><td data-label="工具与账号">工具与账号</td><td>闲管家账号 + 本人闲鱼号。官网/入口：<a href="https://www.xygj.pro/">xygj.pro</a>、<a href="https://goofish.pro/">goofish.pro</a>（本次均返回 200）。提供电脑客户端下载。这是第三方公司产品，不是闲鱼官方自营后台（官方自营后台是鱼小铺）。</td></tr>
+      <tr><td data-label="费用">费用</td><td>本次未登录其会员订购页，不能把价格写成已核实。一份 2025 年 2 月的第三方对接文档写过铂金会员约 48 元/月、198 元/年，且「一个铂金会员仅对应一个店铺」。该数字<strong>待本人在官方订购页核对</strong>，未核实前不要付款。</td></tr>
+      <tr><td data-label="规则与风险">规则与风险</td><td>闲管家及部分 B 站教程自称「闲鱼官方授权服务商」。若确属闲鱼「开发、授权或认可/认证」的工具，则比开源脚本更接近协议允许范围。但：① 本次未能在阿里官方文档或服务市场页面完整核实其仍在架、授权范围（淘宝开放平台有服务市场主体变更公示，已抓取文本中未检索到「闲管家」字样，可能是表格抽取不全，故标待核实）；② 绑定方式含闲鱼会员名和密码，必须先确认闲鱼已同意该授权，否则与「账户仅限本人使用」冲突；③ 自动擦亮、自动回复即便工具提供，仍有平台风控可能。涉及花钱，须本人最终批准。</td></tr>
+      <tr><td data-label="能否运行">能否运行</td><td>iPhone 12 Pro：不能把闲管家当官方 App 替代，它是电脑工作台。Windows/Mac 个人电脑：按其下载页安装（本人操作）。共享 Linux 电脑：不建议安装，也未核实有无官方 Linux 版；不要在共享环境保存闲鱼密码。</td></tr>
+      <tr><td data-label="覆盖范围">覆盖范围</td><td>手册覆盖上架、改价、卡密/无卡自动发货、自动擦亮、订单与聊天。是否真正「官方授权全自动」，取决于授权核实结果。</td></tr>
+    </tbody>
+  </table>
+
+  <h3>方法 C. 闲鱼官方开放平台 / API（个人卖家基本走不通）</h3>
+  <p><span class="tag tag-no">对个人课程店不现实</span></p>
+  <table>
+    <thead><tr><th>项</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td data-label="怎么实现">怎么实现</td><td>官方文档《小程序快速接入》写明：闲鱼小程序「目前不对外公开开放申请，只面向闲鱼运营小二定向邀请的服务商，未经邀请的注册将不予通过」。需要企业主体、淘宝开放平台 AppKey、审批，并由运营回填。服务端文档还要求将服务部署在聚石塔。权限包中包含 <code>orderVirtualDelivery</code>（无物流虚拟发货）等，面向被邀请的服务商，不是单店自助开通。<a href="https://open.goofish.com/doc/quick-start.html">快速接入</a>（本次 GET 返回 200）、<a href="https://open.goofish.com/doc/development/dev/server.html">服务端文档</a>。</td></tr>
+      <tr><td data-label="工具与账号">工具与账号</td><td>企业资质、与闲鱼运营对接的服务商身份、聚石塔等。个人闲鱼账号按文档明确不能用于该注册流程。</td></tr>
+      <tr><td data-label="费用">费用</td><td>公开文档未列出个人可购的标准价目；聚石塔等云资源另计。本次无对个人卖家的可执行报价。</td></tr>
+      <tr><td data-label="规则与风险">规则与风险</td><td>这是官方通道，合规性最高，但门槛是「被邀请的企业服务商」，不是本店能马上开通的路径。</td></tr>
+      <tr><td data-label="能否运行">能否运行</td><td>在未受邀请前，不能在 iPhone 或共享电脑上开通。不作为现在的方案。</td></tr>
+    </tbody>
+  </table>
+
+  <h3>方法 D. 开源自动回复 / 自动发货项目（不建议）</h3>
+  <p><span class="tag tag-no">高封号风险 · 与官方协议冲突</span></p>
+  <p>公开 GitHub 上确实有可运行的项目，功能往往覆盖自动回复、付款后自动发货、自动评价、自动擦亮，部分还接大模型做客服。下面星标与推送时间取自 GitHub API，时间为台北时间，读取于 2026年11月25日 06:31。</p>
+  <table>
+    <thead><tr><th>项目</th><th>规模与实现（公开说明）</th></tr></thead>
+    <tbody>
+      <tr><td data-label="项目"><a href="https://github.com/zhinianboke/xianyu-auto-reply">zhinianboke/xianyu-auto-reply</a></td><td>8389 star，2113 fork，AGPL-3.0，最近推送 2026年11月24日 12:11（台北时间）。README 写明以 WebSocket 连接闲鱼服务器，并集成自动发货、自动评价、自动擦亮；同时写「仅供学习研究」「可能存在账号风险」。许可证也禁止其声明中的商业用途。</td></tr>
+      <tr><td data-label="项目"><a href="https://github.com/GuDong2003/xianyu-auto-reply-fix">GuDong2003/xianyu-auto-reply-fix</a></td><td>2995 star，594 fork，AGPL-3.0，最近推送 2026年11月24日 14:09（台北时间）。公开说明为 FastAPI + Playwright 等，并声明与闲鱼官方无授权关系，接口可能随时失效。</td></tr>
+      <tr><td data-label="项目"><a href="https://github.com/23Star/xianyu-super-butler">23Star/xianyu-super-butler</a></td><td>1505 star，836 fork，AGPL-3.0，最近推送 2026年11月24日 18:01（台北时间）。公开宣传自动滑块、自动发货、评价、擦亮，并提供云端托管账号。把闲鱼账号交给第三方托管，风险高于自建，更不建议。</td></tr>
+      <tr><td data-label="项目"><a href="https://github.com/laozuzhen/xianyu-openclaw-channel">laozuzhen/xianyu-openclaw-channel</a></td><td>97 star，最近推送 2026年3月8日 14:35（台北时间），已较长时间未更新。公开说明用 WebSocket 接闲鱼、用浏览器自动化发布商品，并接到 AI Agent。维护状态偏旧。</td></tr>
+      <tr><td data-label="项目">其他同类</td><td>如 <a href="https://github.com/dameng2026/xianyu-pilot">dameng2026/xianyu-pilot</a>（155 star，最近推送 2026年10月1日 17:35，台北时间）等，同样是非官方消息通道或浏览器自动化路线。</td></tr>
+    </tbody>
+  </table>
+  <p>X 上的公开讨论也以推广这类工具为主，同时出现风控提醒。例如 <a href="https://x.com/QT9277/status/2092098552264859947">2026年8月25日一条帖</a>在介绍自动发货工具时写「调用非官方接口，存在账号风控封号风险」；<a href="https://x.com/BelieveJust7/status/2120458582349185481">2026年11月11日一条讨论</a>指出 star 数不能说明能在闲鱼上稳定运行。</p>
+  <table>
+    <thead><tr><th>项</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td data-label="怎么实现">怎么实现</td><td>公开 README 的共同路径是：用非官方方式保持与闲鱼的登录和消息连接（WebSocket、Cookie 或浏览器自动化），再按规则自动回消息、发货、擦亮。此处只作风险说明，不提供配置或绕过验证的步骤。</td></tr>
+      <tr><td data-label="工具与账号">工具与账号</td><td>需要闲鱼登录态。多数项目可自建，部分提供云端代管。与「账户仅限本人使用」和「一个 bot 只登录一个平台」都不相容。</td></tr>
+      <tr><td data-label="费用">费用</td><td>开源代码本身通常免费，但 AGPL-3.0 有开源义务；若接大模型，另计模型费用。云端托管若收费，以对方页面为准，本次未订购、未核价。</td></tr>
+      <tr><td data-label="规则与风险">规则与风险</td><td>直接落入《软件许可使用协议》第四条禁止的「非授权插件/外挂/获取交互数据」范围，也可能违反账户本人使用条款。项目自己的免责声明也承认有账号风险。不能因为 star 多或「听说没被封」就当成安全。</td></tr>
+      <tr><td data-label="能否运行">能否运行</td><td>技术上不少项目声称支持 Docker、可在 Linux 运行，但这台共享电脑不能装、不能登录。iPhone 12 Pro 不能直接当这类服务的服务器。结论：不建议跑，本调研也不部署。</td></tr>
+    </tbody>
+  </table>
+
+  <h3>方法 E. 其他第三方（如鱼店长 / 阿奇索）</h3>
+  <p>公开介绍里，鱼店长属于厦门阿奇索（Agiso）的付费客户端，与 91 卡券、阿奇索开放平台同一产品体系，面向虚拟商品自动发货，<strong>不是闲鱼官方产品</strong>。其风险类型与方法 D 相近（第三方登录与自动化），且同样涉及付费。在官方授权未核实前，不优先于方法 A，也不优先于已声明授权、但仍待核实的方法 B。</p>
+</section>
+
+<section class="box gap" id="sources">
+  <h2>未核实的点与缺口</h2>
+  <ul>
+    <li>《闲鱼社区管理规范（试行）》最新全文（含闲气值区间和扣分表）在 2021 年后改以 App 为准，本次未能打开与 App 一致的官方网页版。闲管家等站点有转载，不能当作已核实的官方原文。</li>
+    <li>闲管家是否仍为闲鱼官方授权/在架服务商，以及授权范围是否包括自动发货、自动擦亮、自动回复：待本人在淘宝服务市场或官方客服确认。</li>
+    <li>闲管家当前会员价格：未登录结算页，不引用未核对的数字作为定价结论。</li>
+    <li>鱼小铺 / 官方 App 是否仍有「智能客服」或官方自动发货：仅见非官方教程，未登录核实。</li>
+    <li>2019 年「云盘/在线分享发货的虚拟音视频」专项清理，在 2026 年是否仍按原文执行：待对照 App 现行规则。</li>
+    <li>官方没有面向普通个人卖家、可自助申请的全自动运营 API。这一缺口不是「没搜到教程」，而是官方文档写明只邀请服务商。</li>
+    <li>本次没有、也不会在共享电脑或 iPhone 上实际跑通任何自动发货流程；「能不能跑」只根据公开文档和协议判断，不是实测结果。</li>
+  </ul>
+
+  <h3>主要已核实来源</h3>
+  <ul>
+    <li><a href="https://terms.alicdn.com/legal-agreement/terms/common_platform_service/20230509172204596/20230509172204596.html">《软件许可使用协议》</a>（2026-04-18）</li>
+    <li><a href="https://terms.alicdn.com/legal-agreement/terms/suit_bu1_other/suit_bu1_other201708081618_51146.html">《闲鱼社区用户服务协议》</a>（2026-05-27 / 2026-06-15 生效）</li>
+    <li><a href="https://terms.alicdn.com/legal-agreement/terms/platform_service/20220929192826912/20220929192826912.html">《闲鱼社区卖家服务协议》</a>（2025-09-17 生效）</li>
+    <li><a href="https://haibao.m.taobao.com/html/Yv1_irSbB">《闲鱼社区公约》</a>（最新修订 2021-12-17）</li>
+    <li><a href="https://haibao.m.taobao.com/html/XZ9E4VaGM">《闲鱼社区信息发布规范》公示通知</a>（2019-11-27）</li>
+    <li><a href="https://haibao.m.taobao.com/html/xq3B7yKWY">《闲鱼协议及规则调整公示通知》</a>（2021-03-10，含规则改以 App 为准，以及 2019 音视频商品管控通知）</li>
+    <li><a href="https://seller.goofish.com/">闲鱼卖家工作台（鱼小铺）</a></li>
+    <li><a href="https://open.goofish.com/doc/quick-start.html">闲鱼小程序快速接入</a>（邀请制）</li>
+    <li><a href="https://open.goofish.com/doc/development/dev/server.html">闲鱼合作方服务端接入文档</a></li>
+    <li><a href="https://m.goofish.pro/app/operation.html">闲管家操作手册</a>（厂商文档，非闲鱼官网）</li>
+  </ul>
+  <p class="foot">本页为调研摘要，不构成对任何第三方工具的推荐购买，也不授权任何人部署非官方闲鱼自动化。涉及花钱或对外发布，须聪伟本人批准。页面发布于 GitHub Pages，仅提供链接，不另发大文件。</p>
+</section>
+</div>
+</body>
+</html>
